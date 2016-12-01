@@ -1,0 +1,63 @@
+<html>
+    <head></head>
+    <body>
+        <script type="text/javascript">
+
+            var Santa = {
+                R : 90,
+                L : -90,
+                direction: 0,
+                vertical : 0,
+                horizontal : 0,
+                position: [[0, 0]],
+                move : function (coordinate) {
+                    var letter = coordinate.substring(0,1);
+                    var blocks = parseInt(coordinate.substring(1, coordinate.length));
+                    this.direction = (this.direction + this[letter] + 360) % 360;
+                    switch (Math.abs(this.direction)) {
+                        case 0:
+                            for (var i = 0; i < blocks; i++) {
+                                this.position.push([this.horizontal, this.vertical+=1]);
+                            }
+                            break;
+                        case 90:
+                            for (var i = 0; i < blocks; i++) {
+                                this.position.push([this.horizontal-=1, this.vertical]);
+                            }
+                            break;
+                        case 180:
+                            for (var i = 0; i < blocks; i++) {
+                                this.position.push([this.horizontal, this.vertical-=1]);
+                            }
+                            break;
+                        case 270:
+                            for (var i = 0; i < blocks; i++) {
+                                this.position.push([this.horizontal+=1, this.vertical]);
+                            }
+                            break;
+                    }
+                },
+                blocks : function () {
+                    return Math.abs(this.horizontal) + Math.abs(this.vertical);
+                },
+                findFirstSame : function(c) {
+                    for (var i = 0; i < this.position.length; i++) {
+                        for (var j = 0; j < this.position.length; j++) {
+                            if (j != i && this.position[i][0] == this.position[j][0] && this.position[i][1] == this.position[j][1]) {
+                                return Math.abs(this.position[i][0]) + Math.abs(this.position[i][1]);
+                            }
+                        }
+                    }
+                    return false;
+                }
+            };
+
+            var input = "L1, L5, R1, R3, L4, L5, R5, R1, L2, L2, L3, R4, L2, R3, R1, L2, R5, R3, L4, R4, L3, R3, R3, L2, R1, L3, R2, L1, R4, L2, R4, L4, R5, L3, R1, R1, L1, L3, L2, R1, R3, R2, L1, R4, L4, R2, L189, L4, R5, R3, L1, R47, R4, R1, R3, L3, L3, L2, R70, L1, R4, R185, R5, L4, L5, R4, L1, L4, R5, L3, R2, R3, L5, L3, R5, L1, R5, L4, R1, R2, L2, L5, L2, R4, L3, R5, R1, L5, L4, L3, R4, L3, L4, L1, L5, L5, R5, L5, L2, L1, L2, L4, L1, L2, R3, R1, R1, L2, L5, R2, L3, L5, L4, L2, L1, L2, R3, L1, L4, R3, R3, L2, R5, L1, L3, L3, L3, L5, R5, R1, R2, L3, L2, R4, R1, R1, R3, R4, R3, L3, R3, L5, R2, L2, R4, R5, L4, L3, L1, L5, L1, R1, R2, L1, R3, R4, R5, R2, R3, L2, L1, L5".split(', ');
+            for (var i = 0; i < input.length; i++) {
+                Santa.move(input[i]);
+            }
+            console.log(Santa.findFirstSame());
+
+        </script>
+    </body>
+</html>
