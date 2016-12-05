@@ -1930,10 +1930,10 @@
                 }
             },
             checkValid: function (a, b ,c) {
-                if (a+b < c || b+c < a || c+a < b) {
-                    return false;
+                if (a+b > c && b+c > a && c+a > b) {
+                    return true;
                 }
-                return true;
+                return false;
             }
         };
         pythagoras.checkAll(document.getElementById('input').innerHTML.split(/\n/g));
