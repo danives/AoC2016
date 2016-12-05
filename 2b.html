@@ -11,23 +11,33 @@ ULRLDLLURDRRUULRDUDDURDDDLRRRURLDRUDDLUDDDLLLRDLRLLRRUUDRRDRUULLLULULUUDRRRDRDRU
                 'getCode' : function(input) {
                     var start = 5;
                     var digits = [];
-                    var numbers = input.replace(/\n/g, ",").split(",");
+                    var numbers = input.split(/\n/g);
                     for (var i = 0; i < numbers.length; i++) {
                         var row = numbers[i];
                         for (var j = 0; j < row.length; j++) {
+                            var _s = start;
                             switch (row[j]) {
                                 case 'L':
-                                    start = ([1, 2, 5, 10, 13].indexOf(start) >= 0) ? start : (start-1);
+                                    // If in one of the listed positions, stay on the 'start', otherwise move left 1
+                                    _s = ([1, 2, 5, 10, 13].indexOf(start) != -1) ? start : (start-1);
                                     break;
                                 case 'R':
-                                    start = ([1, 4, 9, 12, 13].indexOf(start) >= 0) ? start : (start+1);
+                                    // If in one of the listed positions, stay on the 'start', otherwise move right 1
+                                    _s = ([1, 4, 9, 12, 13].indexOf(start) != -1) ? start : (start+1);
                                     break;
                                 case 'U':
-                                    start = ([1, 2, 4, 5, 9].indexOf(start) >= 0) ? start : (start-([7,11].indexOf(start) >=0 ? 4 : 2));
+                                    // If in one of the initial listed positions, stay on the 'start', otherwise move 4 or 2 up depending on the position you're at
+                                    _s = ([1, 2, 4, 5, 9].indexOf(start) != -1) ? start : (start-((start == 3 || start == 13) ? 2 : 4));
                                     break;
                                 case 'D':
-                                    start = ([13, 10, 12, 5, 9].indexOf(start) >= 0) ? start : (start+([3,7].indexOf(start) >=0 ? 4 : 2));
+                                    // If in one of the initial listed positions, stay on the 'start', otherwise move 4 or 2 down depending on the position you're at
+                                    _s = ([13, 10, 12, 5, 9].indexOf(start) != -1) ? start : (start+((start == 1 || start == 11) ? 2 : 4));
                                     break;
+                            }
+                            console.log(_s);
+                            // If the sum is somehow larger than 13 or smaller than 0, go back to the start value.
+                            if (_s > 0 && _s < 14) {
+                                start = _s;
                             }
                         }
                         switch (start) {
