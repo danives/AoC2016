@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <style>
+            * {
+                font-family: Courier;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="output">
+            <span id="n1">0</span>
+            <span id="n2">0</span>
+            <span id="n3">0</span>
+            <span id="n4">0</span>
+            <span id="n5">0</span>
+            <span id="n6">0</span>
+            <span id="n7">0</span>
+            <span id="n8">0</span>
+        </div>
+        <br/><br/>
+        <button onclick="graphical();">Go Graphical (and slow)</button>
+        <br/><br/>
+        <button onclick="quicker();">Go Quick(ish)</button>
+        <script src="http://www.myersdaily.org/joseph/javascript/md5.js"></script>
+        <script type="text/javascript">
+            var i = 0;
+            var input = 'ffykfhsq';
+            var password = {
+                1 : false,
+                2 : false,
+                3 : false,
+                4 : false,
+                5 : false,
+                6 : false,
+                7 : false,
+                8 : false,
+                isValid : function () {
+                    for (var k = 1; k < 9; k++) {
+                        if (this[k] === false) {
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+                animate : function () {
+                    for (var j = 1; j < 9; j++) {
+                        if (this[j] === false) {
+                            var char = Math.random().toString(36).substring(4,5);
+                            document.getElementById('n'+j).innerHTML = char;
+                        } else {
+                            document.getElementById('n'+j).innerHTML = this[j];
+                        }
+                    }
+                },
+                output: function() {
+                    var pass = '';
+                    for (var k = 1; k < 9; k++) {
+                        pass += ''+this[k];
+                    }
+                    return pass;
+                }
+            };
+
+            function graphical() {
+                var animate = window.setInterval(function() {
+                    password.animate();
+                }, 100);
+
+                
+                var cracker = window.setInterval(function() {
+                    if (!password.isValid()) {
+                        var hash = md5(input + "" + (i++));
+                        if (hash.indexOf('00000') == 0) {
+                            var position = parseInt(hash.substring(5,6)) + 1;
+                            if (password[position] == false) {
+                                password[position] = hash.substring(6,7);
+                            }
+                        }
+                    } else {
+                        clearInterval(cracker);
+                        clearInterval(animate);
+                    }
+                }, 0);
+            }
+
+            function quicker() {
+                while (!password.isValid()) {
+                    var hash = md5(input + "" + (i++));
+                    if (hash.indexOf('00000') == 0) {
+                        var position = parseInt(hash.substring(5,6)) + 1;
+                        if (password[position] == false) {
+                            password[position] = hash.substring(6,7);
+                        }
+                    }
+                }
+                alert(password.output());
+            }
+
+        </script>
+    </body>
+</html>

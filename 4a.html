@@ -968,9 +968,11 @@ zsxyfgqj-hqfxxnknji-idj-xytwflj-359[jxfin]</div>
                             }
                         }
                     }
-                    if (this.getSorted(count).join('').substring(0,5) == parts[1].substring(0, parts[1].length-1)) {
+                    var checksum = this.getSorted(count).join('').substring(0,5);
+                    var given_checksum = parts[1].substring(0, parts[1].length-1);
+                    if (checksum == given_checksum) {
                         var p = code.split('-');
-                        this.sum += parseInt(p[p.length-1]);
+                        this.sum += parseInt(p[p.length-1]); // the last part of the code string is the number
                         this.real++;
                     } else {
                         this.fake++;
